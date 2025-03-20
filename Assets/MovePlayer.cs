@@ -1,0 +1,76 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MovePlayer : MonoBehaviour
+{
+    private GameObject player;
+
+    public float speed = 5F;
+
+    [SerializeField] private float jump_power = 0.5f;
+
+    private Rigidbody2D rb2;
+
+    private bool isJumping = false;
+    private int jump_counter = 0;
+    private float jump_cd = 2f;
+    private float timer = 0f;
+    private bool isOnCooldown = false;
+    // Start is called before the first frame update
+    void Start()
+    {
+        rb2 = GetComponent<Rigidbody2D>();
+        if(rb2 == null)
+            Debug.LogError("No rigidbody found");
+        player = GameObject.FindWithTag("Player");
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        Move();
+        Jump();
+    }
+
+    private void Move()
+    {
+        var hor = Input.GetAxis("Horizontal");
+        rb2.velocity = new Vector2(hor * speed, rb2.velocity.y);
+    }
+
+    private void Jump()
+    {
+        if (isOnCooldown) return; 
+
+        float vertical = Input.GetAxis("Vertical");
+
+        if (vertical > 0.2f && !isJumping && jump_counter < 2)
+        {
+            rb2.velocity = new Vector2(rb2.velocity.x, jump_power);
+            jump_counter++;
+            isJumping = true;
+
+            if (jump_counter == 2)
+            {
+                StartCoroutine(JumpCooldown());
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        isJumping = false;
+    }
+
+    private IEnumerator JumpCooldown()
+    {
+        isOnCooldown = true; 
+        yield return new WaitForSeconds(jump_cd);
+        jump_counter = 0; 
+        isOnCooldown = false; 
+    }
+}
+
+
