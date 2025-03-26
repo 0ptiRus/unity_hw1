@@ -18,6 +18,7 @@ public class MovePlayer : MonoBehaviour
     private float jump_cd = 2f;
     private float timer = 0f;
     private bool isOnCooldown = false;
+    private Animator animator;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +26,7 @@ public class MovePlayer : MonoBehaviour
         if(rb2 == null)
             Debug.LogError("No rigidbody found");
         player = GameObject.FindWithTag("Player");
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -51,6 +53,7 @@ public class MovePlayer : MonoBehaviour
             rb2.velocity = new Vector2(rb2.velocity.x, jump_power);
             jump_counter++;
             isJumping = true;
+            animator.SetBool("IsJumping", isJumping);
 
             if (jump_counter == 2)
             {
@@ -62,6 +65,7 @@ public class MovePlayer : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         isJumping = false;
+        animator.SetBool("IsJumping", isJumping);
     }
 
     private IEnumerator JumpCooldown()
