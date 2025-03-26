@@ -16,9 +16,12 @@ public class MovePlayer : MonoBehaviour
     private bool isJumping = false;
     private int jump_counter = 0;
     private float jump_cd = 2f;
-    private float timer = 0f;
     private bool isOnCooldown = false;
+
+    private bool IsFacingRight = true;
+    private bool IsFlipped = false;
     private Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,8 +41,26 @@ public class MovePlayer : MonoBehaviour
 
     private void Move()
     {
-        var hor = Input.GetAxis("Horizontal");
+        float hor = Input.GetAxis("Horizontal");
+        if(hor != 0)
+        {
+            IsFacingRight = hor > 0;
+            if (!IsFacingRight && !IsFlipped)
+            {
+                Flip();
+            }
+            else if (IsFacingRight && IsFlipped)
+            {
+                Flip();
+            }
+        }
         rb2.velocity = new Vector2(hor * speed, rb2.velocity.y);
+    }
+
+    private void Flip()
+    {
+        IsFlipped = !IsFlipped; 
+        transform.rotation = Quaternion.Euler(0, IsFlipped ? 180 : 0, 0);
     }
 
     private void Jump()

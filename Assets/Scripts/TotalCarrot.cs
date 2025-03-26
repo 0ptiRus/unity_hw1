@@ -14,7 +14,7 @@ public class TotalCarrot : MonoBehaviour
         {
             carrots++;
             Destroy(collision.gameObject);
-            total_carrot.text = carrots.ToString();
+            total_carrot.text = $"Carrots: {carrots}";
         }
     }
 }

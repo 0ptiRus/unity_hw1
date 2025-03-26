@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Carrot
+  - Enemy
   layers:
   - Default
   - TransparentFX

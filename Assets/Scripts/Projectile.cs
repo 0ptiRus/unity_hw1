@@ -24,4 +24,23 @@ public class Projectile : MonoBehaviour
     void Update()
     {
     }
+
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if(collision.gameObject.CompareTag("Enemy"))
+    //    {
+    //        Destroy(collision.gameObject);
+    //    }
+    //    DestroyBullet();
+    //}
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            print("Enemy hit");
+            Destroy(collision.gameObject);
+        }
+        DestroyBullet();
+    }
 }
